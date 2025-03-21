@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+"use client"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
+import { usePathname } from "next/navigation";
 
 
 const geistSans = Geist({
@@ -14,21 +15,30 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "now-lite",
-  description: "good will",
-};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  
+  // List of pages that should not use the layout
+  const excludedPages = ["/home", "/register"];
+
+  if (excludedPages.includes(pathname)) {
+    return (
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          {children} {/* Render page without layout */}
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Header />
         <main className="flex-1">{children}</main>
       </body>

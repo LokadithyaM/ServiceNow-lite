@@ -7,7 +7,7 @@ export default function Header() {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
      return (
-        <div className="bg-black border-2 border-black h-[60px] flex justify-between">
+        <div className="bg-black border-2 border-black h-[60px] flex w-full justify-between">
             <div className="flex">
                 <div className="bg-black border-2 border-black h-[40px] w-[200px] m-2 rounded-lg relative overflow-hidden cursor-pointer" onClick={() => router.push("/")}>
                     <Image

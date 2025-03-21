@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     if (action === "registerAdmin") {
         const existingUser = await Admin.findOne({ email });
         if (existingUser) {
+            alert("User Exists");
             return NextResponse.json({ message: "User exists" }, { status: 400 });
         }
     
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
     
         // console.log("User Schema Paths:", Admin.schema.paths);
     
-        const formattedAllowedUsers = allowedUsers.map((user: { firstName: String; lastName: String; email: any; role: String; }) => ({
+        const formattedAllowedUsers = allowedUsers.map((user: { firstName: string; lastName: string; email: string; role: string; }) => ({
             firstName: user.firstName || "",
             lastName: user.lastName || "",
             email: user.email || "",
@@ -132,7 +133,7 @@ export async function POST(req: NextRequest) {
         }
     
         const cacheKey = `allowed_users:${companyId}`;
-        let allowedUsers;
+        let allowedUsers = [];
 
         const cachedData = await Redis.get(cacheKey);
         if (cachedData) {
@@ -145,12 +146,19 @@ export async function POST(req: NextRequest) {
             await Redis.setEx(cacheKey, 86400, JSON.stringify(allowedUsers));
         }
 
+        const allowedUser = allowedUsers.find((user1: { email: string; }) => user1.email === email);
+
+        if(!allowedUser){
+            alert("you don't belong here bruv")
+            return NextResponse.json({ message: "you don't belong here bruv" }, { status: 401 });
+        }
+
         
     
         const sessionToken = crypto.randomUUID();
         const sessionData = {
             email,
-            userName:`${user.firstName} ${user.secondName}`,
+            userName:`${allowedUser.firstName} ${allowedUser.lastName}`,
             userId: user._id,
             companyId: companyId,
         };

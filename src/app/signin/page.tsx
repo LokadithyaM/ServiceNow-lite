@@ -1,49 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import CompanySelect from "@/components/company";
+
 interface Company {
   name: string;
   adminId: string;
 }
 
-
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [companies, setCompanies] = useState<Company[]>([]);
-  const [selectedCompany, setSelectedCompany] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState<Company>({
+    name: "",
+    adminId: "",
+  }); 
   const router = useRouter();
-  const isFormValid = email.trim() !== "" && password.trim() !== "" && selectedCompany !== "";
-
-
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      try {
-        const res = await fetch("/api/companies");
-        if (!res.ok) throw new Error("Failed to fetch companies");
-
-        const data: Company[] = await res.json();
-        // console.error(res);
-        setCompanies(data);
-      } catch (error) {
-        setMessage("Failed to load companies");
-      }
-    };
-
-    fetchCompanies();
-  }, []);
+  const isFormValid = email.trim() !== "" && password.trim() !== "" && selectedCompany.adminId !== "";
 
   const handleLogin = async () => {
     const res = await fetch("/api/auth", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email,companyId: selectedCompany, password : password, action: "login" }),
+      body: JSON.stringify({ email, companyId: selectedCompany.adminId, password, action: "login" }),
     });
 
     const data = await res.json();
-    
     if (res.ok) {
       router.push("/");
     } else {
@@ -52,43 +36,54 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h2 className="text-2xl font-bold">Login</h2>
-      <select
-        value={selectedCompany}
-        onChange={(e) => setSelectedCompany(e.target.value)}
-        className="border p-2 m-2"
-      >
-        <option value="">Select Company</option>
-        {companies.map((company) => (
-          <option key={company.adminId} value={company.adminId}>
-            {company.name}
-          </option>
-        ))}
-      </select>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-200">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="border p-2 m-2"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="border p-2 m-2"
-      />
-      <button
-        onClick={handleLogin}
-        className={`px-4 py-2 text-white ${isFormValid ? "bg-green-500" : "bg-gray-400 cursor-not-allowed"}`}
-        disabled={!isFormValid}
-      >
-        Login
-      </button>
-      {message && <p className="mt-2 text-red-500">{message}</p>}
+        <p className="text-gray-500 text-center mb-6">Sign in to continue</p>
+
+        <div className="space-y-4">
+          <CompanySelect
+            value={selectedCompany.adminId}
+            onChange={(adminId) => setSelectedCompany((prev) => ({ ...prev, adminId }))}
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+          />
+        </div>
+
+        <button
+          onClick={handleLogin}
+          className={`w-full mt-6 py-3 rounded-lg text-white font-semibold transition-all duration-200 ${
+            isFormValid ? "bg-blue-600 hover:bg-blue-700 shadow-md" : "bg-gray-400 cursor-not-allowed"
+          }`}
+          disabled={!isFormValid}
+        >
+          Login
+        </button>
+
+        {message && <p className="mt-4 text-red-500 text-center">{message}</p>}
+
+        <p className="mt-6 text-center text-sm text-gray-500">
+          Don't have an account?{" "}
+          <a href="/signup" className="text-blue-600 hover:underline">
+            Sign up
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

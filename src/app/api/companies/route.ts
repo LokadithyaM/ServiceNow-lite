@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import Company from "@/lib/company";
 import { Types } from "mongoose";
 
+
 export async function GET() {
   try {
     await connectToDatabase();
