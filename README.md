@@ -1,5 +1,5 @@
 
-#This project is currently under development
+# This project is currently under development
 
 # Now Lite
 **A lightweight, high-performance alternative to ServiceNow for teams.**
