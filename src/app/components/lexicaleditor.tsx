@@ -67,7 +67,7 @@ function Toolbar({ onPost }: { onPost: () => void }) {
   };
 
   return (
-    <div className="flex h-full w-[1470px] justify-between items-center border-b p-2 bg-gray-200">
+    <div className="flex h-full w-auto justify-between items-center border-b p-2 bg-gray-200">
       <div className="flex gap-2">
         <button
           className={`p-2 ${format.bold ? "bg-green-300" : "bg-gray-100"}`}
@@ -135,11 +135,12 @@ function EditorContainer({ onPostAction }: { onPostAction: (message: string) => 
   
       if (message.trim()) {
         onPostAction(message); // Send message to Chat component
+        message="";
       }
     };
   
     return (
-      <div className="border rounded-md p-3 w-[1500px]">
+      <div className="border rounded-md p-3 w-auto">
         <Toolbar onPost={handlePost} />
         <div className="relative border p-2 mt-2">
           <RichTextPlugin

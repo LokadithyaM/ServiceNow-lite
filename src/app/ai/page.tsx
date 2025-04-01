@@ -1,31 +1,36 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 
 export default function AI() {
   const [prompt, setPrompt] = useState<string>("");
   const [response, setResponse] = useState<string>("");
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState(null);
 
   useEffect(() => {
-      const fetchData = async () => {
-          try {
-              const response = await fetch("/api/allowedUsers"); 
-              const result = await response.json();
-              setData(result);
-              console.log(result);
-          } catch (error) {
-              console.error("Error fetching data:", error);
-          }
-      };
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/allowedUsers");
+        const result = await response.json();
+        setData(result);
+        console.log(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-      fetchData();
+    fetchData();
   }, []);
 
   const handleSubmit = async () => {
-    if (!prompt) return;
+    if (!prompt.trim()) return;
 
+    setLoading(true);
     try {
       const res = await fetch("/api/openai", {
         method: "POST",
@@ -35,68 +40,65 @@ export default function AI() {
 
       const data = await res.json();
       const fullData = JSON.parse(data.response);
-      
-          if (fullData.action === "sendMessage") {
-              console.log("congrats");
-              console.log(fullData);
-          }else if (fullData.action === "RaiseTicket") {
-              console.log("congrats2");
-              console.log(fullData);
-      
-              const newFormData = {
-                  Short_description: fullData.Short_description || "",
-                  description: fullData.description || "",
-                  priority: fullData.priority || "",
-                  state: fullData.state || "",
-                  category: fullData.category || "",
-                  assigned_to: fullData.assigned_to || "",
-              };
-      
-              const response = await fetch("/api/incidnets", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                      action: "add_incident",
-                      incident: newFormData,
-                  }),
-                  credentials: "include",
-              });
-      
-              console.log(response);
 
-        
-          }else if (fullData.action === "Summarize") {
-              console.log("congrats3");
-              console.log(fullData);
-          }
+      if (fullData.action === "sendMessage") {
+        console.log("Message sent:", fullData);
+      } else if (fullData.action === "RaiseTicket") {
+        console.log("Ticket Raised:", fullData);
 
-      setResponse(fullData.action+" that works i believe over and out.");
+        const newFormData = {
+          Short_description: fullData.Short_description || "",
+          description: fullData.description || "",
+          priority: fullData.priority || "",
+          state: fullData.state || "",
+          category: fullData.category || "",
+          assigned_to: fullData.assigned_to || "",
+        };
+
+        await fetch("/api/incidnets", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "add_incident", incident: newFormData }),
+          credentials: "include",
+        });
+      } else if (fullData.action === "Summarize") {
+        console.log("Summarizing:", fullData);
+      }
+
+      setResponse(fullData.action + " executed successfully.");
     } catch (error) {
       console.error("Error fetching AI response:", error);
       setResponse("Error fetching AI response.");
     }
+    setLoading(false);
   };
 
   return (
-    <div className="p-4 min-h-screen">
-      <div className="m-2 w-[500px] h-[200px] flex flex-col items-end">
-        {response && (
-          <pre className="mt-4 p-2 bg-gray-100 border rounded">{response}</pre>
-        )}
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Enter your text here..."
-          className="w-full p-2 border rounded"
-        />
+    <div className="flex justify-center items-center w-full h-full bg-gray-50 p-6">
+      <Card className="w-full max-w-lg shadow-lg border">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-gray-800">AI Assistant</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {response && (
+            <div className="mb-4 p-3 bg-gray-100 border-l-4 border-blue-500 rounded text-gray-700">
+              {response}
+            </div>
+          )}
 
-        <button
-          onClick={handleSubmit}
-          className="mt-2 p-2 bg-blue-500 text-white rounded"
-        >
-          Send
-        </button>
-      </div>
+          <Textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Enter your text here..."
+            className="w-full p-2 border rounded resize-none"
+            rows={4}
+          />
+
+          <Button onClick={handleSubmit} className="w-full mt-4" disabled={loading}>
+            {loading ? <Loader2 className="animate-spin mr-2" size={18} /> : "Send"}
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

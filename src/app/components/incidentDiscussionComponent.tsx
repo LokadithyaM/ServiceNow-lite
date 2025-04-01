@@ -16,6 +16,7 @@ export default function IncidentDiscussion() {
     const handlePost = (message: string) => {
       console.log("Posted Message:", message);
       setMessages((prev) => [...prev, message]); // Store messages in state
+        
     };
 
     const [formData, setFormData] = useState({
@@ -44,12 +45,12 @@ export default function IncidentDiscussion() {
 
     const handleUpdate = async () => {
         if (incident.priority !== formData.priority || formData.assigned_to !== check.assigned_to) {
-            if(formData.assigned_to===""){
-                formData.assigned_to=incident.assigned_to;
+            if(formData.assigned_to === ""){
+                formData.assigned_to = incident.assigned_to;
             }
 
-            if(formData.priority ===""){
-                formData.priority=incident.priority;
+            if(formData.priority === ""){
+                formData.priority = incident.priority;
             }
             try {
                 const res = await fetch("/api/updateDB", {
@@ -82,7 +83,6 @@ export default function IncidentDiscussion() {
     };
 
     const handleResolved = async () =>{
-
         const res = await fetch("/api/resolved", {
             method: "PUT",
             headers: {
@@ -100,134 +100,64 @@ export default function IncidentDiscussion() {
             return;
         }
 
-        alert("oh congrats well if this was a mistake your admin can restore the incident back cheers!");
-
+        alert("Oh congrats! If this was a mistake, your admin can restore the incident back. Cheers!");
         router.push("/taskList");
     }
     
     return (
         <div className="min-h-screen w-full flex flex-col gap-4 items-center justify-start p-3">
-            <div className="flex gap-2">
-            <div className="border-2 h-full w-full">
-                <div className="h-auto w-[1500px] gap-4  border-2">
-                    <div className="border-2 mb-2 h-[50] p-2 flex items-center justify-between w-full">
-                        <div className="text-2xl">ID: {incident.id}</div>
-                        <div className="flex gap-2">
-                            <Image
-                                onClick={() => router.push("/taskList")}
-                                className="dark:invert object-contain cursor-pointer"
-                                src="/wrong.svg"
-                                alt="Logo"
-                                height={50}
-                                width={50}
-                            />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                        <div className="flex items-center space-x-4 w-full">
-                            <h1 className="text-lg font-semibold whitespace-nowrap">Incident ID:</h1>
-                            <TextField className="bg-gray-200 rounded flex-grow" value={incident.id} disabled />
-                        </div>
-
-
-                        <FormControl fullWidth>
-                            {/* <TextField label="State" value="New" disabled /> */}
-                        </FormControl>
-                        <div className="flex items-center space-x-4 w-full">
-                            <h1 className="text-lg font-semibold whitespace-nowrap">State:</h1>
-                            <TextField className="bg-gray-200 rounded flex-grow" value="New" disabled />
-                        </div>
-
-
-                        
-
-                        <div className="flex items-center space-x-4 w-full">
-                            <h1 className="text-lg font-semibold whitespace-nowrap">Caller:</h1>
-                            <TextField className="bg-gray-200 rounded flex-grow" value={incident.caller} disabled />
-                        </div>
-
-
-                        <FormControl fullWidth>
-                            {/* <TextField label="State" value="New" disabled /> */}
-                        </FormControl>
-
-                        <div className="flex items-center space-x-4 w-full">
-                            <h1 className="text-lg font-semibold whitespace-nowrap">Category:</h1>
-                            <TextField className="bg-gray-200 rounded flex-grow" value={incident.category} disabled />
-                        </div>
-
-
-
-                        <div className="flex items-center space-x-4 w-full">
-                            <h1 className="text-lg font-semibold whitespace-nowrap">Priority:</h1>
-                            <Select
-                                name="priority"
-                                value={formData.priority || incident.priority}
-                                onChange={handleChange}
-                                className="rounded flex-grow"
-                                displayEmpty
-                            >
-                                <MenuItem value="" disabled>Select Priority</MenuItem>
-                                <MenuItem value="Critical">1 - Critical</MenuItem>
-                                <MenuItem value="High">2 - High</MenuItem>
-                                <MenuItem value="Medium">3 - Medium</MenuItem>
-                                <MenuItem value="Low">4 - Low</MenuItem>
-                            </Select>
-                        </div>
-
-
-                        <FormControl fullWidth>
-                            {/* <TextField label="State" value="New" disabled /> */}
-                        </FormControl>
-
-                        <div className="mb-4 flex gap-2 justify-between items-center">
-                            <h1 className="text-lg font-semibold whitespace-nowrap">Assigned to:</h1>
-                            <UserSelect
-                                value={formData.assigned_to || incident.assigned_to}
-                                onChange={(name) => setFormData((prev) => ({ ...prev, assigned_to: name }))}
-                            />
-                        </div>
-
-                        {/* <div className="w-full h-full border-2 border-black"></div> */}
-
-                    </div>
-
-
-                    <div className="mb-4 flex gap-2 items-center">
-                        <h1 className="text-lg font-semibold whitespace-nowrap">Short Description:</h1>
-                        <TextField className="bg-gray-200"  name="Short_description" value={incident.Short_description} fullWidth multiline rows={2} variant="outlined" disabled/>
-                    </div>
-                    <div className="mb-4 flex gap-2 items-center">
-                        <h1 className="text-lg font-semibold whitespace-nowrap">Description:</h1>
-                        <TextField className="bg-gray-200" name="description" value={incident.description} fullWidth multiline rows={4} variant="outlined" disabled />
-                    </div>
-                    {/* <h1>Incident Discussion</h1>
-                    <p><strong>ID:</strong> {incident.id}</p>
-                    <p><strong>Description:</strong> {incident.Short_description}</p>
-                    <p><strong>Caller:</strong> {incident.caller}</p>
-                    <p><strong>Priority:</strong> {incident.priority}</p>
-                    <p><strong>State:</strong> {incident.state}</p>
-                    <p><strong>Category:</strong> {incident.category}</p>
-                    <p><strong>Assigned To:</strong> {incident.assigned_to}</p>
-                    {incident.updated}; */}
-                    <div className="w-full h-[50px] border-2 border-black flex justify-end gap-2">
-                        <Button variant="contained" color="success" onClick={handleUpdate}>Update</Button>
-
-                        <Button variant="contained" color="success" onClick={handleResolved}>mark Resolved</Button>
-                    </div>
+            <div className="border-2 h-auto w-full max-w-6xl p-4 bg-white shadow-md rounded-lg">
+                <div className="flex items-center justify-between border-b pb-2 mb-4">
+                    <h2 className="text-xl font-semibold">Incident Discussion</h2>
+                    <Image
+                        onClick={() => router.push("/taskList")}
+                        className="dark:invert object-contain cursor-pointer"
+                        src="/wrong.svg"
+                        alt="Close"
+                        height={30}
+                        width={30}
+                    />
                 </div>
+                <div className="grid grid-cols-1 mb-4 sm:grid-cols-2 gap-6">
+                    <TextField label="Incident ID" value={incident.id} disabled fullWidth />
+                    <TextField label="Caller" value={incident.caller} disabled fullWidth />
+                    <TextField label="Category" value={incident.category} disabled fullWidth />
+                    <FormControl fullWidth>
+                        <InputLabel>Priority</InputLabel>
+                        <Select
+                            name="priority"
+                            value={formData.priority || incident.priority}
+                            onChange={handleChange}
+                        >
+                            <MenuItem value="Critical">1 - Critical</MenuItem>
+                            <MenuItem value="High">2 - High</MenuItem>
+                            <MenuItem value="Medium">3 - Medium</MenuItem>
+                            <MenuItem value="Low">4 - Low</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <UserSelect
+                        value={formData.assigned_to || incident.assigned_to}
+                        onChange={(name) => setFormData((prev) => ({ ...prev, assigned_to: name }))}
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <TextField label="Short Description" value={incident.Short_description} fullWidth multiline rows={2} disabled className="mt-4"/>
+                    <TextField label="Description" value={incident.description} fullWidth multiline rows={4} disabled className="mt-4"/>
+                </div>
+                <div className="flex justify-end mt-4 gap-2">
+                    <Button variant="contained" color="success" onClick={handleUpdate}>Update</Button>
+                    <Button variant="contained" color="success" onClick={handleResolved}>Mark Resolved</Button>
                 </div>
             </div>
-         <div className="min-h-screen w-full flex flex-col gap-4 items-center justify-start p-3">
-            <LexicalEditor onPostAction={handlePost} onPost={function (message: string): void {} } /> {}
-            <div className="border-2 h-full w-[1500px]">
-                <h3>Posted Messages:</h3>
-                <ul>
+            <div className="border-2 h-auto w-full max-w-6xl p-4 bg-white shadow-md rounded-lg mt-6">
+                <LexicalEditor onPostAction={handlePost} onPost={function (message: string): void {
+                } } />
+                <h3 className="text-lg font-semibold mt-4">Work Notes:</h3>
+                <ul className="border-t mt-2 pt-2">
                     {messages.map((msg, index) => (
-                    <li key={index} className="p-2 border-b">{msg}</li>
+                        <li key={index} className="p-2 border-b">{msg}</li>
                     ))}
                 </ul>
-                </div>
             </div>
         </div>
     );
