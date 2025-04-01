@@ -72,9 +72,6 @@ Contributions are welcome! Follow these steps:
 4. Push the branch: `git push origin feature-name`
 5. Open a Pull Request.
 
-## License
-This project is licensed under the MIT License.
-
 ---
 _Developed with Next.js, Redis, and a vision for a better ticketing experience._
 
