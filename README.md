@@ -2,10 +2,10 @@
 # This project is currently under development
 
 # Now Lite
-**A lightweight, high-performance alternative to ServiceNow for teams.**
+**A lightweight, high-performance ticketing and commincation system for teams.**
 
 ## Overview
-Now Lite is a scalable and production-ready ticketing system designed to optimize team collaboration and incident management. It integrates in-app documentation, personalized mailing, and real-time updates to offer a seamless user experience. Built with modern web technologies, it aims to outperform existing solutions like ServiceNow in speed and usability.
+Now Lite is a scalable and production-ready ticketing system designed to optimize team collaboration and incident management. It integrates in-app documentation, personalized mailing, and real-time updates to offer a seamless user experience. Built with modern web technologies, it aims to bring together the best o f out 
 
 ## Features
 - **Incident Management**: Create, update, and track incidents effortlessly.
@@ -17,7 +17,7 @@ Now Lite is a scalable and production-ready ticketing system designed to optimiz
 
 ## Tech Stack
 - **Frontend**: Next.js (TypeScript), SWR
-- **Backend**: Node.js, Redis, WebSockets
+- **Backend**: Node.js, Redis
 - **Database**: MongoDB
 - **Authentication**: Custom cryptographic hashing, Iron Session, Redis for session management
 - **Deployment**: Vercel
@@ -73,5 +73,3 @@ Contributions are welcome! Follow these steps:
 5. Open a Pull Request.
 
 ---
-_Developed with Next.js, Redis, and a vision for a better ticketing experience._
-
