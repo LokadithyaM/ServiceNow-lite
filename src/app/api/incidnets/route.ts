@@ -63,7 +63,9 @@ export async function POST(req: NextRequest) {
 
         // const newId = `INC0${Object.keys(incidents).length + 1}`;
         // const newId = `INC019`;
-        // console.error(incident);
+        console.error(incident);
+
+        // console.log(incident);
 
 
 

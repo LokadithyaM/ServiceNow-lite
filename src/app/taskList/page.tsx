@@ -28,7 +28,9 @@ const fetcher = async (url: string) => {
         body: JSON.stringify({ action: "fetch_Incident_Id" }),
         credentials: "include",
     });
-    if (!res.ok) throw new Error(`Error: ${res.status} ${await res.text()}`);
+    if (!res.ok){
+        throw new Error(`Error login again please: ${res.status} ${await res.text()}`);
+    }
     const data = await res.json();
     if (typeof data.incidents !== "object" || data.incidents === null) {
         throw new Error("Invalid response format: Expected an object (map)");

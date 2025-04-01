@@ -37,6 +37,11 @@ export default function Home() {
                       title="Custom Documentation" 
                       text="Built-in knowledge management keeps project notes and essential documentation all in one place, minimizing external dependencies." 
                   />
+
+                    <FeatureCard 
+                      title="Automation at every corner" 
+                      text="Built-in knowledge management keeps project notes and essential documentation all in one place, minimizing external dependencies." 
+                  />
               </div>
           </div>
 
@@ -85,7 +90,7 @@ interface UserFlowCardProps {
 function UserFlowCard({ title, text, link }: UserFlowCardProps) {
   return (
       <div className="flex flex-col justify-between h-1/2 w-1/3 p-6 bg-[#151515] rounded-xl shadow-lg relative text-white">
-          <p className="text-lg text-gray-300 leading-relaxed">{text}</p>
+          <p className="text-xl text-gray-300 leading-relaxed">{text}</p>
           <a href={link} className="absolute bottom-4 right-4">
               <button className="px-6 py-3 text-lg font-bold bg-green-900 cursor-pointer text-white rounded-lg shadow-md transition hover:scale-105 hover:bg-green-600">
                   {title}

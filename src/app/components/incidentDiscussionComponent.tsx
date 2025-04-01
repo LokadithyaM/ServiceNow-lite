@@ -4,11 +4,19 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { TextField, MenuItem, Select, FormControl, InputLabel, SelectChangeEvent, Button } from "@mui/material";
 import { useState } from "react";
 import UserSelect from "@/components/dbsearch";
+import LexicalEditor from "@/components/lexicaleditor";
 
 export default function IncidentDiscussion() {
     const searchParams = useSearchParams();
     const encodedData = searchParams.get("data");
     const router = useRouter();
+
+    const [messages, setMessages] = useState<string[]>([]);
+
+    const handlePost = (message: string) => {
+      console.log("Posted Message:", message);
+      setMessages((prev) => [...prev, message]); // Store messages in state
+    };
 
     const [formData, setFormData] = useState({
         Short_description: "",
@@ -208,6 +216,17 @@ export default function IncidentDiscussion() {
                         <Button variant="contained" color="success" onClick={handleResolved}>mark Resolved</Button>
                     </div>
                 </div>
+                </div>
+            </div>
+         <div className="min-h-screen w-full flex flex-col gap-4 items-center justify-start p-3">
+            <LexicalEditor onPostAction={handlePost} onPost={function (message: string): void {} } /> {}
+            <div className="border-2 h-full w-[1500px]">
+                <h3>Posted Messages:</h3>
+                <ul>
+                    {messages.map((msg, index) => (
+                    <li key={index} className="p-2 border-b">{msg}</li>
+                    ))}
+                </ul>
                 </div>
             </div>
         </div>

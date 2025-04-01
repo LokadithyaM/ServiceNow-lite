@@ -56,36 +56,45 @@ function Toolbar({ onPost }: { onPost: () => void }) {
     });
   }, [editor]);
 
-  return (
-    <div className="flex justify-between items-center border-b p-2 bg-gray-200">
-      {/* Post Button */}
-      <button className="p-2 bg-blue-500 text-white rounded-md" onClick={onPost}>
-        <Send size={18} />
-      </button>
+  const applyFormat = (formatType: "bold" | "italic" | "underline") => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        editor.focus(); // 🔥 Force focus back to the editor before applying formatting
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, formatType);
+      }
+    });
+  };
 
+  return (
+    <div className="flex h-full w-[1470px] justify-between items-center border-b p-2 bg-gray-200">
       <div className="flex gap-2">
         <button
           className={`p-2 ${format.bold ? "bg-green-300" : "bg-gray-100"}`}
-          onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")}
+          onClick={() => applyFormat("bold")}
         >
           <Bold size={18} />
         </button>
         <button
           className={`p-2 ${format.italic ? "bg-green-300" : "bg-gray-100"}`}
-          onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")}
+          onClick={() => applyFormat("italic")}
         >
           <Italic size={18} />
         </button>
         <button
           className={`p-2 ${format.underline ? "bg-green-300" : "bg-gray-100"}`}
-          onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")}
+          onClick={() => applyFormat("underline")}
         >
           <Underline size={18} />
         </button>
       </div>
+      <button className="p-2 bg-blue-500 text-white rounded-md" onClick={onPost}>
+        <Send size={18} />
+      </button>
     </div>
   );
 }
+
 function onPostAction(message: string) {
     throw new Error("Function not implemented.");
 }
@@ -130,7 +139,7 @@ function EditorContainer({ onPostAction }: { onPostAction: (message: string) => 
     };
   
     return (
-      <div className="border rounded-md p-3 w-full max-w-lg">
+      <div className="border rounded-md p-3 w-[1500px]">
         <Toolbar onPost={handlePost} />
         <div className="relative border p-2 mt-2">
           <RichTextPlugin

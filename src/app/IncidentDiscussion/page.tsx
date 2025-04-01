@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import IncidentDiscussionComponent from "../components/incidentDiscussionComponent"; // Corrected path
+import IncidentDiscussionComponent from "../components/incidentDiscussionComponent";
 
 export default function IncidentDiscussionPage() {
   return (

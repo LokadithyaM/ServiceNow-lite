@@ -13,15 +13,12 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ message: "Session expired. Please log in again." }, { status: 401 });
     }
 
-    // console.error(sessionData);
-
     const { companyId } = JSON.parse(sessionData);
     if (!companyId) {
         return NextResponse.json({ message: "Company ID missing from session." }, { status: 400 });
     }
 
     const cachedUsers = await redisClient.get(`allowed_users:${companyId}`);
-    // console.error(companyId);
 
     if (!cachedUsers) {
         return NextResponse.json({ message: "Allowed users not found in cache." }, { status: 404 });

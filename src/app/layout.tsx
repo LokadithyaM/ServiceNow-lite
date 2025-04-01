@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import { usePathname } from "next/navigation";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 
 
 const geistSans = Geist({
@@ -41,6 +43,8 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Header />
         <main className="flex-1">{children}</main>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

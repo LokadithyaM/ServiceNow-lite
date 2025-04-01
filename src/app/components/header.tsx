@@ -69,7 +69,7 @@ export default function Header() {
                     />
                 </div>
 
-                <div className="bg-black border-2 border-black h-[40px] w-[40px] m-2 rounded-full relative overflow-hidden cursor-pointer" onClick={() => router.push("/team")} >
+                <div className="bg-black border-2 border-black h-[40px] w-[40px] m-2 rounded-full relative overflow-hidden cursor-pointer" onClick={() => router.push("/email")} >
                     <Image
                         className="dark:invert object-cover"
                         src="/teams.svg"
