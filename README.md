@@ -9,7 +9,7 @@
 Awake is a minimalistic goal-tracking platform designed to enhance productivity with AI-driven insights and seamless communication. It features real-time goal tracking, personalized analytics, and a WhatsApp-like messaging system for mentorship and collaboration.
 
 for guide through please go through the below link
-[Product Demo](https://www.youtube.com/watch?v=pqpSk4MElFo)\
+[Product Demo](https://www.youtube.com/watch?v=pqpSk4MElFo)
 
 - use gmail: alexander.m@example.com
 - passkey : humble
