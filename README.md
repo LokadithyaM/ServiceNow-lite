@@ -26,6 +26,7 @@ Now Lite is a scalable and production-ready ticketing system designed to enhance
 - **Team Updates & Documentation**: Maintain a centralized record of team activities and internal updates.
 - **Optimized Performance**: Uses Redis caching and SWR for background data fetching to ensure fast operations.
 - **Scalability**: Developed with Next.js and deployed on Vercel for seamless scaling and reliability.
+- **Automation**: Leveraging LLM-powered systems as the core intelligence for automated applications, utilizing a token-based framework for dynamic decision-making and execution.
 
 ## Tech Stack
 - **Framework**: Next.js (TypeScript)
@@ -34,6 +35,7 @@ Now Lite is a scalable and production-ready ticketing system designed to enhance
 - **Database**: MongoDB
 - **Authentication**: Custom-built authentication system
 - **Deployment**: Vercel
+- **LLM model**: Gemini
 
 ## Installation
 ### Prerequisites
