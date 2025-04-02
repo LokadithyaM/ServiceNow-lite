@@ -4,6 +4,18 @@
 # Now Lite
 **A lightweight, high-performance ticketing and communication system for teams.**
 
+## About Awake
+
+Awake is a minimalistic goal-tracking platform designed to enhance productivity with AI-driven insights and seamless communication. It features real-time goal tracking, personalized analytics, and a WhatsApp-like messaging system for mentorship and collaboration.
+
+for guide through please go through the below link
+[Product Demo](https://www.youtube.com/watch?v=pqpSk4MElFo)\
+
+use gmail: alexander.m@gmail.com
+passkey : humble
+[Live Application](https://servicenowlite-git-main-lokadithyams-projects.vercel.app/home)
+
+
 ## Overview
 Now Lite is a scalable and production-ready ticketing system designed to enhance team collaboration and incident management. It seamlessly integrates in-app documentation, personalized mailing, and real-time updates, ensuring a smooth and efficient user experience. Built with cutting-edge web technologies, Now Lite aims to deliver a powerful yet lightweight solution for modern teams.
 
