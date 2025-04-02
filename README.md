@@ -11,9 +11,9 @@ Awake is a minimalistic goal-tracking platform designed to enhance productivity 
 for guide through please go through the below link
 [Product Demo](https://www.youtube.com/watch?v=pqpSk4MElFo)\
 
-use gmail: alexander.m@gmail.com
-passkey : humble
-[Live Application](https://servicenowlite-git-main-lokadithyams-projects.vercel.app/home)
+- use gmail: alexander.m@example.com
+- passkey : humble
+- [Live Application](https://servicenowlite-git-main-lokadithyams-projects.vercel.app/home)
 
 
 ## Overview
