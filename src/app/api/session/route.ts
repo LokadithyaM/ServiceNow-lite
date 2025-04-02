@@ -16,5 +16,6 @@ export async function GET() {
     }
 
     const sessionData = JSON.parse(sessionDataRaw);
+    // console.log(sessionData);
     return NextResponse.json(sessionData);
 }

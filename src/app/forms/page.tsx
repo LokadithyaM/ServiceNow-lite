@@ -25,7 +25,6 @@ export default function Form() {
     text: string;
   }
   
-  const [messages, setMessages] = useState<Message[]>([]);
 
   const [errors, setErrors] = useState({
     Short_description: false,

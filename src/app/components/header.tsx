@@ -17,14 +17,6 @@ export default function Header() {
                         fill
                     />
                 </div>
-
-                <div className="flex bg-black  justify-center items-center border-2 border-black h-[40px] w-[100px] m-2 rounded-lg">
-                    <h1 className="text-white">My Incidents</h1>
-                </div>
-
-                <div className="flex bg-black  justify-center items-center border-2 border-black h-[40px] w-[120px] m-2 rounded-lg">
-                    <h1 className="text-white">Assigned to me</h1>
-                </div>
             </div>
             <div className="flex">
                 <div className="bg-black border-2 border-black h-[40px] w-[40px] m-2 rounded-full relative overflow-hidden cursor-pointer" onClick={() => router.push("/taskList")}>

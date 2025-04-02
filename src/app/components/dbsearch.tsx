@@ -39,7 +39,7 @@ const UserSelect: React.FC<UserSelectProps> = ({ value, onChange }) => {
 
   return (
     <Autocomplete
-      className="w-full flex-grow"
+      className="w-full h-auto flex-grow bg-white"
       options={users}
       getOptionLabel={(option) => `${option.firstName} ${option.lastName}`} // Show full name
       value={users?.find((user) => `${user.firstName} ${user.lastName}` === value) || null}

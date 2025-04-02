@@ -5,6 +5,7 @@ import { TextField, MenuItem, Select, FormControl, InputLabel, SelectChangeEvent
 import { useState } from "react";
 import UserSelect from "@/components/dbsearch";
 import LexicalEditor from "@/components/lexicaleditor";
+import Group from "@/email/temp"
 
 export default function IncidentDiscussion() {
     const searchParams = useSearchParams();
@@ -150,6 +151,7 @@ export default function IncidentDiscussion() {
                 </div>
             </div>
             <div className="border-2 h-auto w-full max-w-6xl p-4 bg-white shadow-md rounded-lg mt-6">
+                <Group/>
                 <LexicalEditor onPostAction={handlePost} onPost={function (message: string): void {
                 } } />
                 <h3 className="text-lg font-semibold mt-4">Work Notes:</h3>
