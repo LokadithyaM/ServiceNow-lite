@@ -2,74 +2,86 @@
 # This project is currently under development
 
 # Now Lite
-**A lightweight, high-performance ticketing and commincation system for teams.**
+**A lightweight, high-performance ticketing and communication system for teams.**
 
 ## Overview
-Now Lite is a scalable and production-ready ticketing system designed to optimize team collaboration and incident management. It integrates in-app documentation, personalized mailing, and real-time updates to offer a seamless user experience. Built with modern web technologies, it aims to bring together the best o f out 
+Now Lite is a scalable and production-ready ticketing system designed to enhance team collaboration and incident management. It seamlessly integrates in-app documentation, personalized mailing, and real-time updates, ensuring a smooth and efficient user experience. Built with cutting-edge web technologies, Now Lite aims to deliver a powerful yet lightweight solution for modern teams.
 
 ## Features
-- **Incident Management**: Create, update, and track incidents effortlessly.
-- **Real-time Messaging**: Chat with team members using WebSockets and Redis Pub/Sub.
-- **Personalized Mailing Space**: Filter and prioritize team emails efficiently.
-- **Team Updates & Documentation**: Keep track of internal updates within the app.
-- **High Performance**: Optimized for speed using Redis caching and SWR for background data fetching.
-- **Scalability**: Built with Next.js and deployed on Vercel for seamless scaling.
+- **Incident Management**: Effortlessly create, update, and track incidents.
+- **Real-time Messaging**: Communicate with team members instantly using WebSockets and Redis Pub/Sub.
+- **Personalized Mailing Space**: Filter, prioritize, and manage team emails efficiently.
+- **Team Updates & Documentation**: Maintain a centralized record of team activities and internal updates.
+- **Optimized Performance**: Uses Redis caching and SWR for background data fetching to ensure fast operations.
+- **Scalability**: Developed with Next.js and deployed on Vercel for seamless scaling and reliability.
 
 ## Tech Stack
-- **Frontend**: Next.js (TypeScript), SWR
-- **Backend**: Node.js, Redis
+- **Framework**: Next.js (TypeScript)
+- **Session Management**: Redis
+- **Dynamic Data Fetching**: SWR (15-second polling)
 - **Database**: MongoDB
-- **Authentication**: Custom cryptographic hashing, Iron Session, Redis for session management
+- **Authentication**: Custom-built authentication system
 - **Deployment**: Vercel
 
 ## Installation
 ### Prerequisites
 Ensure you have the following installed:
-- Node.js (latest LTS)
+- Node.js (Latest LTS version)
 - MongoDB
 - Redis
 
-### Setup
-1. Clone the repository:
+### Setup Instructions
+1. **Clone the repository:**
    ```sh
    git clone https://github.com/your-repo/now-lite.git
    cd now-lite
    ```
-2. Install dependencies:
+2. **Install dependencies:**
    ```sh
    npm install
    ```
-3. Set up environment variables:
-   Create a `.env.local` file and configure the following:
+3. **Configure environment variables:**
+   Create a `.env.local` file and add the following:
    ```env
    MONGODB_URI=your_mongo_connection_string
    REDIS_URL=your_redis_connection_string
    NEXTAUTH_SECRET=your_secret_key
    ```
-4. Start the development server:
+4. **Start the development server:**
    ```sh
    npm run dev
    ```
-   The app will be available at `http://localhost:3000`.
+   The application will be available at `http://localhost:3000`.
 
 ## Usage
-- **Admin Signup**: Create an admin account to manage incidents and users.
-- **User Signup**: Sign up and join an organization for ticketing and team communication.
-- **Create Incidents**: Raise tickets and track their status in real-time.
-- **Messaging & Collaboration**: Communicate with team members via the in-app chat system.
+- **Admin Signup**: Register an admin account to manage incidents and users.
+- **User Signup**: Join an organization to participate in ticketing and team communication.
+- **Incident Management**: Create, track, and manage support tickets in real-time.
+- **Messaging & Collaboration**: Communicate efficiently with team members via the in-app chat system.
 
 ## Roadmap
-- [ ] Incident Deletion & Updating
-- [ ] Complete Messaging System Functionality
-- [ ] Advanced User Roles & Permissions
-- [ ] Mobile-friendly UI Enhancements
+- [ ] Integrate a messaging system for real-time updates
+- [ ] Implement advanced user roles and permissions
+- [ ] Enhance UI for a mobile-friendly experience
 
-## Contribution
-Contributions are welcome! Follow these steps:
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature-name`
-3. Commit your changes: `git commit -m 'Add feature XYZ'`
-4. Push the branch: `git push origin feature-name`
-5. Open a Pull Request.
+## Contribution Guidelines
+Contributions are welcome! To get started:
+1. **Fork the repository.**
+2. **Create a new branch:**
+   ```sh
+   git checkout -b feature-name
+   ```
+3. **Make your changes and commit:**
+   ```sh
+   git commit -m 'Add feature XYZ'
+   ```
+4. **Push your branch:**
+   ```sh
+   git push origin feature-name
+   ```
+5. **Open a Pull Request for review.**
 
 ---
+Now Lite is designed to simplify team workflows with a lightweight yet powerful ticketing and communication system. Join us in making incident management smarter and more efficient!
+
+
