@@ -60,7 +60,7 @@ Ensure you have the following installed:
 - **Messaging & Collaboration**: Communicate efficiently with team members via the in-app chat system.
 
 ## Roadmap
-- [ ] Integrate a messaging system for real-time updates
+- [ ] Integrate realtime updates (notifcation system)
 - [ ] Implement advanced user roles and permissions
 - [ ] Enhance UI for a mobile-friendly experience
 
