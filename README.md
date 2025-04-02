@@ -60,6 +60,7 @@ Ensure you have the following installed:
    MONGODB_URI=your_mongo_connection_string
    REDIS_URL=your_redis_connection_string
    NEXTAUTH_SECRET=your_secret_key
+   gemini_key=google_ai_studio_key
    ```
 4. **Start the development server:**
    ```sh
