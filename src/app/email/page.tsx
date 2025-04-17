@@ -1,16 +1,12 @@
 "use client";
 import UserSelect from "@/components/dbsearch";
-import { NextResponse } from "next/server";
 import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
-
-const socket = io("http://localhost:3000", { path: "/api/socket" });
 
 interface Message {
     sender: string;
     receiver: string;
     message: string;
-    timestamp: string;
+    timestamp: number;
 }
 
 interface User {
@@ -19,11 +15,14 @@ interface User {
     lastName: string;
     email: string;
     role: string;
+    messages: [];
 }
 
-export default function LandingPage() {
 
-    const [profiles, setProfiles] = useState<(User & { id: number; showDetails: boolean })[]>([]);
+
+export default function LandingPage() {
+  const [users, setAllowedUsers] = useState<User[]>([]);
+    const [profiles, setProfiles] = useState<(User & { id: number; showDetails: boolean;})[]>([]);
     const [selectedProfile, setSelectedProfile] = useState<(User & { id: number }) | null>(null);
     const [message, setMessage] = useState("");
     const [formData, setFormData] = useState({
@@ -31,18 +30,63 @@ export default function LandingPage() {
       });
     
 
-    useEffect(() =>{
-        async function fetchKnown(){
-            console.log("just passing time here");
+      useEffect(() => {
+        async function initializeProfiles() {
+          try {
+            // 1. Get session
+            const sessionRes = await fetch("/api/session");
+            if (!sessionRes.ok) throw new Error("Session fetch failed");
+      
+            const sessionData = await sessionRes.json();
+            const currentUser = sessionData.email;
+      
+            // 2. Get allowed users
+            const usersRes = await fetch("/api/allowedUsers");
+            if (!usersRes.ok) throw new Error("Allowed users fetch failed");
+      
+            const { allowedUsers } = await usersRes.json();
+            setAllowedUsers(allowedUsers);
+      
+            // 3. For each user, check chat
+            const fetchedProfiles = [];
+      
+            for (const user of allowedUsers) {
+              if (user.email === currentUser) continue;
+              console.log(user.email+" "+currentUser);
+      
+              const res = await fetch("/api/checkchat", {
+                method: "POST",
+                body: JSON.stringify({ sender: currentUser, receiver: user.email }),
+              });
+      
+              const data = await res.json();
+              console.log(data);
+      
+              if (data.chat) {
+                fetchedProfiles.push({
+                  id: fetchedProfiles.length + 1,
+                  _id: user._id,
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  email: user.email,
+                  role: user.role,
+                  messages: data.chat.messages,
+                  showDetails: false,
+                });
+              }
+            }
+
+            console.log(fetchedProfiles);
+      
+            setProfiles(fetchedProfiles);
+          } catch (err) {
+            console.error("Profile initialization failed:", err);
+          }
         }
-
-        fetchKnown();
-    },[]);
-
-    const handlePost = async () => {
-        const trimmedMessage = message.trim();
-        console.log("hello!@handlePost");
-    };
+      
+        initializeProfiles();
+      }, []);
+      
 
     function toggleDetails(id: number) {
         setProfiles((prevProfiles) =>
@@ -56,8 +100,6 @@ export default function LandingPage() {
         setSelectedProfile(user);
     }
     
-
-    const [users, setAllowedUsers] = useState<User[]>([]);
 
     async function handleAddProfile() {
         if (formData.assigned_to === "") {
@@ -82,7 +124,6 @@ export default function LandingPage() {
             }
         }
     
-        // Find user after ensuring data is available
         const current = updatedUsers.find(
             (user) => `${user.firstName} ${user.lastName}` === formData.assigned_to
         );
@@ -93,13 +134,14 @@ export default function LandingPage() {
             setProfiles([
               ...profiles,
               {
-                id: profiles.length + 1, // Unique ID for the profile
-                _id: current._id, // User _id
+                id: profiles.length + 1,
+                _id: current._id,
                 firstName: current.firstName,
                 lastName: current.lastName,
                 email: current.email,
                 role: current.role,
-                showDetails: false, // New property for toggling details
+                showDetails: false,
+                messages: current.messages,
               },
             ]);
           } else {
@@ -175,24 +217,35 @@ export default function LandingPage() {
       
 }
 
+
 function Chat({ profile }: { profile: User | null }) {
     const [messages, setMessages] = useState<Record<string, Message[]>>({});
     const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
     const [message, setMessage] = useState("");
+
+    useEffect(() => {
+      if (!profile?.email || !profile.messages) return;
+  
+      setMessages((prevMessages) => ({
+          ...prevMessages,
+          [profile.email!]: profile.messages,
+      }));
+  }, [profile]);
+  
   
     useEffect(() => {
         async function fetchMessages() {
             try {
-                const response = await fetch("/api/session"); // Adjust if the endpoint differs
+                const response = await fetch("/api/session");
                 if (!response.ok) {
                     throw new Error("Session fetch failed");
                 }
                 const sessionData = await response.json();
                 console.log("Session Data:", sessionData);
-                setCurrentUserEmail(sessionData.email); // Assuming email is part of session data
+                setCurrentUserEmail(sessionData.email);
             } catch (error) {
                 console.error("Error fetching session:", error);
-                setCurrentUserEmail(null); // Handle unauthorized users gracefully
+                setCurrentUserEmail(null);
             }
         }
 
@@ -200,48 +253,63 @@ function Chat({ profile }: { profile: User | null }) {
     }, []);
 
     const handlePost = async () => {
-        const trimmedMessage = message.trim();
-        if (!trimmedMessage) return;
-      
-        const newMessage: Message = {
-          sender: currentUserEmail || "unknown",
-          message: trimmedMessage,
-          timestamp: new Date().toISOString(),
-          receiver: profile?.email || "",
-        };
-      
-        // Add the new message to the specific user's chat (based on the email)
+      const trimmedMessage = message.trim();
+      if (!trimmedMessage) return;
+    
+      const newMessage: Message = {
+        sender: currentUserEmail || "unknown",
+        receiver: profile?.email || "",
+        message: trimmedMessage,
+        timestamp: Date.now(),
+      };
+    
+      try {
+        const res = await fetch("/api/message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newMessage),
+        });
+    
+        if (!res.ok) {
+          const errorData = await res.json();
+          console.error("Failed to send message:", errorData.error || res.statusText);
+          return;
+        }
+    
+        // Optimistically update local state
         setMessages((prevMessages) => {
-          // Create a copy of the previous messages to update
           const updatedMessages = { ...prevMessages };
-      
-          // If there are no messages for this email, initialize it
-          if (!updatedMessages[profile?.email||""]) {
-            updatedMessages[profile?.email||""] = [];
+          const receiverEmail = profile?.email || "";
+    
+          if (!updatedMessages[receiverEmail]) {
+            updatedMessages[receiverEmail] = [];
           }
-      
-          // Check if the message already exists (based on timestamp and sender)
-          const existingMessages = updatedMessages[profile?.email||""];
+    
+          const existingMessages = updatedMessages[receiverEmail];
           const messageExists = existingMessages.some(
             (msg) =>
               msg.sender === newMessage.sender &&
               msg.message === newMessage.message &&
               msg.timestamp === newMessage.timestamp
           );
-      
-          // Only add the new message if it doesn't exist already
+    
           if (!messageExists) {
-            updatedMessages[profile?.email||""].push(newMessage);
+            updatedMessages[receiverEmail].push(newMessage);
           }
-      
-          return updatedMessages; // Return the updated state
+    
+          return updatedMessages;
         });
-      
-        // Clear the input field after posting
+    
         setMessage("");
-      };
+      } catch (error) {
+        console.error("Error while sending message:", error);
+      }
+    };
+    
       
-  
+    console.log(profile?.messages);
     return (
       <div className="p-4 border rounded-lg w-full h-full m-2 bg-gray-900">
         {/* Header */}
@@ -301,10 +369,10 @@ function Chat({ profile }: { profile: User | null }) {
 
 /* ProfileCard Component */
 function ProfileCard({ profile, toggleDetails, handleAddProfile, handleProfileClick }: { 
-    profile: { id: number; showDetails: boolean; email: string; _id: string; firstName: string; lastName: string; role: string };
+    profile: { id: number; showDetails: boolean; email: string; _id: string; firstName: string; lastName: string; role: string; messages:[];};
     toggleDetails: (id: number) => void;
     handleAddProfile: () => void;
-    handleProfileClick: (profile: { id: number; _id: string; firstName: string; lastName: string; email: string; role: string }) => void;
+    handleProfileClick: (profile: User & { id: number; showDetails: boolean }) => void;
   }) {
     const [email, setEmail] = useState(profile.email);
     const [name, setName] = useState(`${profile.firstName} ${profile.lastName}`);

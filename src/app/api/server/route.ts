@@ -5,7 +5,7 @@ import Redis from "@/lib/redis";
 export async function GET() {
     try {
         const sessionToken = (await cookies()).get("session_token")?.value;
-        console.log(sessionToken);
+        console.log("sessiontokens are under way");
 
         if (!sessionToken) {
             return NextResponse.json({ session: null }, { status: 401 });
