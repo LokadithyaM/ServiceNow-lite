@@ -1,9 +1,6 @@
 
 # This project is currently under development
-currently owrking on integration of multilevel ai system that is capable of autonomus activities including 
-onboarding 
-guidance 
-personal assistant and so on and so forth...
+working with multilevel llm architecture for automation.
 
 # Now Lite
 **A lightweight, high-performance ticketing and communication system for teams.**
